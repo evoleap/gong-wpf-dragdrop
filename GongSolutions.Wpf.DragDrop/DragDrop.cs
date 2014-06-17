@@ -242,7 +242,7 @@ namespace GongSolutions.Wpf.DragDrop
     }
 
     public static readonly DependencyProperty DragSourceIgnoreProperty =
-      DependencyProperty.RegisterAttached("DragSourceIgnore", typeof(bool), typeof(DragDrop), new PropertyMetadata(false));
+      DependencyProperty.RegisterAttached("DragSourceIgnore", typeof(bool), typeof(DragDrop), new FrameworkPropertyMetadata(false));
 
     public static bool GetDragSourceIgnore(UIElement target)
     {
@@ -268,6 +268,19 @@ namespace GongSolutions.Wpf.DragDrop
     public static void SetDragMouseAnchorPoint(UIElement target, Point value)
     {
       target.SetValue(DragMouseAnchorPointProperty, value);
+    }
+      
+    public static readonly DependencyProperty DragSourceElementProperty =
+      DependencyProperty.RegisterAttached("DragSourceElement", typeof(object), typeof(DragDrop), new PropertyMetadata(null));
+
+    public static object GetDragSourceElement(UIElement target)
+    {
+        return (object)target.GetValue(DragSourceElementProperty);
+    }
+
+    public static void SetDragSourceElement(UIElement target, object value)
+    {
+        target.SetValue(DragSourceElementProperty, value);
     }
 
     public static IDragSource DefaultDragHandler
@@ -568,6 +581,16 @@ namespace GongSolutions.Wpf.DragDrop
 
     private static void DragSource_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
+        var uiel = sender as UIElement;
+        if(uiel != null)
+        {
+            var sourceElement = GetDragSourceElement(uiel);
+            if(sourceElement != null)
+            {
+                sender = sourceElement;
+            }
+        }
+
       // Ignore the click if clickCount != 1 or the user has clicked on a scrollbar.
       var elementPosition = e.GetPosition((IInputElement)sender);
       if (e.ClickCount != 1
@@ -601,6 +624,16 @@ namespace GongSolutions.Wpf.DragDrop
 
     private static void DragSource_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
     {
+        var uiel = sender as UIElement;
+        if(uiel != null)
+        {
+            var sourceElement = GetDragSourceElement(uiel);
+            if(sourceElement != null)
+            {
+                sender = sourceElement;
+            }
+        }
+
       // If we prevented the control's default selection handling in DragSource_PreviewMouseLeftButtonDown
       // by setting 'e.Handled = true' and a drag was not initiated, manually set the selection here.
       var itemsControl = sender as ItemsControl;
@@ -634,6 +667,16 @@ namespace GongSolutions.Wpf.DragDrop
 
     private static void DragSource_PreviewMouseMove(object sender, MouseEventArgs e)
     {
+        var uiel = sender as UIElement;
+        if(uiel != null)
+        {
+            var sourceElement = GetDragSourceElement(uiel);
+            if(sourceElement != null)
+            {
+                sender = sourceElement;
+            }
+        }
+
       if (m_DragInfo != null && !m_DragInProgress) {
         var dragStart = m_DragInfo.DragStartPosition;
         var position = e.GetPosition((IInputElement)sender);
