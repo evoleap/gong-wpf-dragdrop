@@ -30,6 +30,25 @@ namespace GongSolutions.Wpf.DragDrop
       target.SetValue(DragAdornerTemplateProperty, value);
     }
 
+
+
+
+    public static DataTemplateSelector GetDragAdornerTemplateSelector(DependencyObject obj)
+    {
+        return (DataTemplateSelector)obj.GetValue(DragAdornerTemplateSelectorProperty);
+    }
+
+    public static void SetDragAdornerTemplateSelector(DependencyObject obj, DataTemplateSelector value)
+    {
+        obj.SetValue(DragAdornerTemplateSelectorProperty, value);
+    }
+
+    // Using a DependencyProperty as the backing store for DragAdornerTemplateSelector.  This enables animation, styling, binding, etc...
+    public static readonly DependencyProperty DragAdornerTemplateSelectorProperty =
+        DependencyProperty.RegisterAttached("DragAdornerTemplateSelector", typeof(DataTemplateSelector), typeof(DragDrop), new PropertyMetadata(null));
+
+
+
     public static readonly DependencyProperty UseDefaultDragAdornerProperty =
       DependencyProperty.RegisterAttached("UseDefaultDragAdorner", typeof(bool), typeof(DragDrop), new PropertyMetadata(false));
 
@@ -283,6 +302,19 @@ namespace GongSolutions.Wpf.DragDrop
         target.SetValue(DragSourceElementProperty, value);
     }
 
+    public static readonly DependencyProperty PanelOrientationProperty =
+        DependencyProperty.RegisterAttached("PanelOrientationProperty", typeof(Orientation?), typeof(DragDrop), new PropertyMetadata((Orientation?)null));
+
+    public static Orientation? GetPanelOrientation(UIElement target)
+    {
+        return (Orientation?)target.GetValue(PanelOrientationProperty);
+    }
+
+    public static void SetPanelOrientation(UIElement target, Orientation? value)
+    {
+        target.SetValue(PanelOrientationProperty, value);
+    }
+
     public static IDragSource DefaultDragHandler
     {
       get
@@ -362,6 +394,7 @@ namespace GongSolutions.Wpf.DragDrop
     private static void CreateDragAdorner()
     {
       var template = GetDragAdornerTemplate(m_DragInfo.VisualSource);
+      var templateSelector = GetDragAdornerTemplateSelector(m_DragInfo.VisualSource);
 
       UIElement adornment = null;
 
@@ -372,36 +405,72 @@ namespace GongSolutions.Wpf.DragDrop
 
         var factory = new FrameworkElementFactory(typeof(Image));
 
-        var bs = CaptureScreen(m_DragInfo.VisualSourceItem, m_DragInfo.VisualSourceFlowDirection);
+        Size bounds;
+        var bs = CaptureScreen(m_DragInfo.VisualSourceItem, m_DragInfo.VisualSourceFlowDirection, out bounds);
         factory.SetValue(Image.SourceProperty, bs);
         factory.SetValue(RenderOptions.EdgeModeProperty, EdgeMode.Aliased);
         factory.SetValue(RenderOptions.BitmapScalingModeProperty, BitmapScalingMode.HighQuality);
+          factory.SetValue(FrameworkElement.WidthProperty, bounds.Width);
+          factory.SetValue(FrameworkElement.HeightProperty, bounds.Height);
         if (m_DragInfo.VisualSourceItem is FrameworkElement) {
-          factory.SetValue(FrameworkElement.WidthProperty, ((FrameworkElement)m_DragInfo.VisualSourceItem).ActualWidth);
-          factory.SetValue(FrameworkElement.HeightProperty, ((FrameworkElement)m_DragInfo.VisualSourceItem).ActualHeight);
           factory.SetValue(FrameworkElement.HorizontalAlignmentProperty, HorizontalAlignment.Left);
           factory.SetValue(FrameworkElement.VerticalAlignmentProperty, VerticalAlignment.Top);
         }
         template.VisualTree = factory;
       }
 
-      if (template != null) {
+      if (template != null || templateSelector != null) {
         if (m_DragInfo.Data is IEnumerable && !(m_DragInfo.Data is string)) {
-          if (((IEnumerable)m_DragInfo.Data).Cast<object>().Count() <= 10) {
-            var itemsControl = new ItemsControl();
-            itemsControl.ItemsSource = (IEnumerable)m_DragInfo.Data;
-            itemsControl.ItemTemplate = template;
+            var items = ((IEnumerable)m_DragInfo.Data).Cast<object>();
+          int itemCount = items.Count();
+          if (itemCount > 1)
+          {
+              var container = new Grid();
+              if (itemCount >= 3)
+              {
+                  var border3 = new Border();
+                  border3.Margin = new Thickness(10, 10, 0, 0);
 
-            // The ItemsControl doesn't display unless we create a border to contain it.
-            // Not quite sure why this is...
-            var border = new Border();
-            border.Child = itemsControl;
-            adornment = border;
+                  var thirdItem = new ContentPresenter();
+                  thirdItem.Content = items.ElementAt(2);
+                  thirdItem.ContentTemplate = template;
+                  thirdItem.ContentTemplateSelector = templateSelector;
+                  border3.Child = thirdItem;
+
+                  container.Children.Add(border3);
+              }
+              if (itemCount >= 2)
+              {
+                  var border2 = new Border();
+                  border2.Margin = new Thickness(5);
+
+                  var secondItem = new ContentPresenter();
+                  secondItem.Content = items.ElementAt(1);
+                  secondItem.ContentTemplate = template;
+                  secondItem.ContentTemplateSelector = templateSelector;
+                  border2.Child = secondItem;
+
+                  container.Children.Add(border2);
+              }
+
+              var border1 = new Border();
+              border1.Margin = new Thickness(0, 0, 10, 10);
+
+              var firstItem = new ContentPresenter();
+              firstItem.Content = items.ElementAt(0);
+              firstItem.ContentTemplate = template;
+              firstItem.ContentTemplateSelector = templateSelector;
+              border1.Child = firstItem;
+
+              container.Children.Add(border1);
+
+              adornment = container;
           }
         } else {
           var contentPresenter = new ContentPresenter();
           contentPresenter.Content = m_DragInfo.Data;
           contentPresenter.ContentTemplate = template;
+          contentPresenter.ContentTemplateSelector = templateSelector;
           adornment = contentPresenter;
         }
       }
@@ -431,13 +500,14 @@ namespace GongSolutions.Wpf.DragDrop
 
     // Helper to generate the image - I grabbed this off Google 
     // somewhere. -- Chris Bordeman cbordeman@gmail.com
-    private static BitmapSource CaptureScreen(Visual target, FlowDirection flowDirection, double dpiX = 96.0, double dpiY = 96.0)
+    private static BitmapSource CaptureScreen(Visual target, FlowDirection flowDirection, out Size bounds, double dpiX = 96.0, double dpiY = 96.0)
     {
       if (target == null) {
+        bounds = new Size();
         return null;
       }
 
-      var bounds = VisualTreeHelper.GetDescendantBounds(target);
+      bounds = VisualTreeHelper.GetDescendantBounds(target).Size;
 
       var rtb = new RenderTargetBitmap((int)(bounds.Width * dpiX / 96.0),
                                        (int)(bounds.Height * dpiY / 96.0),
@@ -451,10 +521,10 @@ namespace GongSolutions.Wpf.DragDrop
         if (flowDirection == FlowDirection.RightToLeft) {
           var transformGroup = new TransformGroup();
           transformGroup.Children.Add(new ScaleTransform(-1, 1));
-          transformGroup.Children.Add(new TranslateTransform(bounds.Size.Width - 1, 0));
+          transformGroup.Children.Add(new TranslateTransform(bounds.Width - 1, 0));
           ctx.PushTransform(transformGroup);
         }
-        ctx.DrawRectangle(vb, null, new Rect(new Point(), bounds.Size));
+        ctx.DrawRectangle(vb, null, new Rect(new Point(), bounds));
       }
 
       rtb.Render(dv);

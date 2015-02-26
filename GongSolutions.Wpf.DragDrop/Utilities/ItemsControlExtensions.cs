@@ -150,6 +150,11 @@ namespace GongSolutions.Wpf.DragDrop.Utilities
 
     public static Orientation GetItemsPanelOrientation(this ItemsControl itemsControl)
     {
+      var specifiedOrientation = DragDrop.GetPanelOrientation(itemsControl);
+      if (specifiedOrientation.HasValue) {
+          return specifiedOrientation.Value;
+      }
+
       var itemsPresenter = itemsControl.GetVisualDescendent<ItemsPresenter>();
 
       if (itemsPresenter != null) {

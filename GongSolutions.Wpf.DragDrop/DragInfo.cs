@@ -50,9 +50,13 @@ namespace GongSolutions.Wpf.DragDrop
         if (sourceItem != null) {
           item = itemsControl.GetItemContainer(sourceItem);
         }
-        if (item == null) {
-          item = itemsControl.GetItemContainerAt(e.GetPosition(itemsControl), itemsControl.GetItemsPanelOrientation());
-        }
+        // KN: This call gets the item container nearest the mouse, even if the mouse was not actually
+        // over an item.  This is problematic when, for example, the user clicks the background of a
+        // list box in order to deselect all items.  What ends up happening is this call finds the nearest
+        // selectable item and selects that instead, so there's no way to achieve the desired behavior.
+        //if (item == null) {
+        //  item = itemsControl.GetItemContainerAt(e.GetPosition(itemsControl), itemsControl.GetItemsPanelOrientation());
+        //}
 
         if (item != null) {
           // Remember the relative position of the item being dragged
