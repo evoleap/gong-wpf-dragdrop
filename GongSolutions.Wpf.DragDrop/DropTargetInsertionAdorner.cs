@@ -45,6 +45,14 @@ namespace GongSolutions.Wpf.DragDrop
               itemRect.Y += itemContainer.RenderSize.Height;
             }
 
+            var fe = itemContainer as FrameworkElement;
+            if (fe != null) {
+              itemRect.Offset(0, -fe.Margin.Top);
+              if (this.DropInfo.InsertIndex == itemParent.Items.Count) {
+                itemRect.Offset(0, fe.Margin.Top + fe.Margin.Bottom);
+              }
+            }
+
             point1 = new Point(itemRect.X, itemRect.Y);
             point2 = new Point(itemRect.Right, itemRect.Y);
           } else {
