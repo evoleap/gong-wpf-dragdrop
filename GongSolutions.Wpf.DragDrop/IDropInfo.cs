@@ -20,6 +20,11 @@ namespace GongSolutions.Wpf.DragDrop
     /// </remarks>
     object Data { get; }
 
+        /// <summary>
+        /// Gets the drag tag object.
+        /// </summary>
+        object Tag { get; }
+
     /// <summary>
     /// Gets a <see cref="DragInfo"/> object holding information about the source of the drag, 
     /// if the drag came from within the framework.

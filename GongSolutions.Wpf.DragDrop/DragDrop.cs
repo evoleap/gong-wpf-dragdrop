@@ -17,7 +17,30 @@ namespace GongSolutions.Wpf.DragDrop
   {
     public static readonly DataFormat DataFormat = DataFormats.GetDataFormat("GongSolutions.Wpf.DragDrop");
 
-    public static readonly DependencyProperty DragAdornerTemplateProperty =
+
+
+
+
+        public static object GetTag(DependencyObject obj)
+        {
+            return (object)obj.GetValue(TagProperty);
+        }
+
+        public static void SetTag(DependencyObject obj, object value)
+        {
+            obj.SetValue(TagProperty, value);
+        }
+
+        // Using a DependencyProperty as the backing store for Tag.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty TagProperty =
+            DependencyProperty.RegisterAttached("Tag", typeof(object), typeof(DragDrop), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.Inherits));
+
+
+
+
+
+
+        public static readonly DependencyProperty DragAdornerTemplateProperty =
       DependencyProperty.RegisterAttached("DragAdornerTemplate", typeof(DataTemplate), typeof(DragDrop));
 
     public static DataTemplate GetDragAdornerTemplate(UIElement target)

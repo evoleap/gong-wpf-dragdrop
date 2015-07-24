@@ -37,6 +37,10 @@ namespace GongSolutions.Wpf.DragDrop
     {
       var dataFormat = DragDrop.DataFormat.Name;
       this.Data = (e.Data.GetDataPresent(dataFormat)) ? e.Data.GetData(dataFormat) : e.Data;
+            if (e.OriginalSource is DependencyObject)
+            {
+                this.Tag = DragDrop.GetTag((DependencyObject)e.OriginalSource);
+            }
       this.DragInfo = dragInfo;
       this.KeyStates = e.KeyStates;
 
@@ -140,6 +144,11 @@ namespace GongSolutions.Wpf.DragDrop
     /// - A typed IEnumerable if multiple items were dragged.
     /// </remarks>
     public object Data { get; private set; }
+
+        /// <summary>
+        /// Gets the drag tag object.
+        /// </summary>
+        public object Tag { get; private set; }
 
     /// <summary>
     /// Gets a <see cref="DragInfo"/> object holding information about the source of the drag, 
