@@ -449,6 +449,7 @@ namespace GongSolutions.Wpf.DragDrop
           if (itemCount > 1)
           {
               var container = new Grid();
+              container.Opacity = GetDefaultDragAdornerOpacity(m_DragInfo.VisualSource);
               if (itemCount >= 3)
               {
                   var border3 = new Border();
@@ -491,6 +492,7 @@ namespace GongSolutions.Wpf.DragDrop
           }
         } else {
           var contentPresenter = new ContentPresenter();
+          contentPresenter.Opacity = GetDefaultDragAdornerOpacity(m_DragInfo.VisualSource);
           contentPresenter.Content = m_DragInfo.Data;
           contentPresenter.ContentTemplate = template;
           contentPresenter.ContentTemplateSelector = templateSelector;
