@@ -1,8 +1,6 @@
-﻿using System;
-using System.Text;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using GongSolutions.Wpf.DragDrop;
 
 namespace GongSolutions.Wpf.DragDrop.UnitTests
 {
@@ -12,28 +10,28 @@ namespace GongSolutions.Wpf.DragDrop.UnitTests
     [TestMethod]
     public void TestCompatibleTypes_Of_Same_Type()
     {
-      Assert.IsTrue(DefaultDropHandler_Accessor.TestCompatibleTypes(
-                                                                    new List<string>(),
-                                                                    new[] { "Foo", "Bar" }));
+      Assert.IsTrue(DefaultDropHandler.TestCompatibleTypes(
+   new List<string>(),
+        new[] { "Foo", "Bar" }));
     }
 
     [TestMethod]
     public void TestCompatibleTypes_Common_Interface()
     {
-      Assert.IsTrue(DefaultDropHandler_Accessor.TestCompatibleTypes(
-                                                                    new List<IInterface>(),
-                                                                    new[] { new BaseClass(), new DerivedClassA() }));
+      Assert.IsTrue(DefaultDropHandler.TestCompatibleTypes(
+        new List<IInterface>(),
+   new[] { new BaseClass(), new DerivedClassA() }));
     }
 
     [TestMethod]
     public void TestCompatibleTypes_Collection_TooDerived()
     {
-      Assert.IsFalse(DefaultDropHandler_Accessor.TestCompatibleTypes(
-                                                                     new List<DerivedClassA>(),
-                                                                     new[] { new BaseClass(), new DerivedClassA() }));
+      Assert.IsFalse(DefaultDropHandler.TestCompatibleTypes(
+        new List<DerivedClassA>(),
+        new[] { new BaseClass(), new DerivedClassA() }));
     }
 
-    private interface IInterface
+  private interface IInterface
     {
     }
 
