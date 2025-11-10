@@ -16,6 +16,12 @@ resources:
       name: evoleap/devops
       endpoint: evoleap
 
+variables:
+  - name: buildPlatform
+    value: 'Any CPU'
+  - name: buildConfiguration
+    value: 'Release'
+
 jobs:
 - job: BuildArtifact
   variables:
@@ -38,6 +44,7 @@ jobs:
     inputs:
       command: 'build'
       projects: 'gong-wpf-dragdrop/GongSolutions.Wpf.DragDrop.sln'
+      arguments: '-c $(buildConfiguration) -r "$(buildPlatform)"'
   - task: NuGetCommand@2
     inputs:
       command: 'pack'
