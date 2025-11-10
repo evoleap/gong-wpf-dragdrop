@@ -19,6 +19,7 @@
     <Compile Remove="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="GongSolutions.Wpf.DragDrop.nuspec" />
     <None Remove="packages.config" />
   </ItemGroup>
   <ItemGroup>
