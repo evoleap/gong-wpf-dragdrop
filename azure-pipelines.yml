@@ -1,0 +1,51 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- dev
+
+pool:
+  vmImage: windows-latest
+
+resources:
+  repositories:
+    - repository: evoleapdevops
+      type: github
+      name: evoleap/devops
+      endpoint: evoleap
+
+jobs:
+- job: BuildArtifact
+  variables:
+    versionNumber: ''
+    workingVersion: ''
+    symVer: ''
+    isRelease: $[eq(variables['Build.SourceBranch'], 'refs/heads/stable')]
+    verPrefix: ''
+    verSuffix: ''
+  steps:
+  - checkout: self
+  - checkout: evoleapdevops
+  - task: NuGetToolInstaller@1
+    inputs:
+      versionSpec: 
+  - task: NuGetAuthenticate@1
+    displayName: 'NuGet Authenticate'
+  - task: DotNetCoreCLI@2
+    displayName: 'Build .NET 8 solution'
+    inputs:
+      command: 'build'
+      projects: 'gong-wpf-dragdrop/GongSolutions.Wpf.DragDrop.sln'
+  - task: NuGetCommand@2
+    inputs:
+      command: 'pack'
+      packagesToPack: 'gong-wpf-dragdrop/GongSolutions.Wpf.DragDrop/GongSolutions.Wpf.DragDrop.net8.nuspec'
+      versioningScheme: 'off'
+  - task: NuGetCommand@2
+    inputs:
+      command: 'push'
+      packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg'
+      nuGetFeedType: 'internal'
+      publishVstsFeed: '4e2dc0fe-c532-420e-8889-18ca9bea1ff1'
