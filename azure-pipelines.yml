@@ -44,7 +44,7 @@ jobs:
     inputs:
       command: 'build'
       projects: 'gong-wpf-dragdrop/GongSolutions.Wpf.DragDrop.sln'
-      arguments: '-c $(buildConfiguration) -r "$(buildPlatform)"'
+      arguments: '-c $(buildConfiguration)'
   - task: NuGetCommand@2
     inputs:
       command: 'pack'
