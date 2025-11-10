@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36623.8 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C1D14F10-00C7-4BE6-9A49-D2B5C950DE34}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GongSolutions.Wpf.DragDrop", "GongSolutions.Wpf.DragDrop\GongSolutions.Wpf.DragDrop.csproj", "{0C6674CC-6D49-414A-9B41-D4E175028FFB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GongSolutions.Wpf.DragDrop.UnitTests", "GongSolutions.Wpf.DragDrop.UnitTests\GongSolutions.Wpf.DragDrop.UnitTests.csproj", "{27DB2F6D-D0F3-47CA-BBE7-7FF7C868C791}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{96F74036-17C4-470A-B820-1B0653472F61}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DefaultsExample", "Examples\DefaultsExample\DefaultsExample.csproj", "{310992A5-1F59-472C-A6BB-8CFDA2FE1EA0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0C6674CC-6D49-414A-9B41-D4E175028FFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C6674CC-6D49-414A-9B41-D4E175028FFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C6674CC-6D49-414A-9B41-D4E175028FFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C6674CC-6D49-414A-9B41-D4E175028FFB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{27DB2F6D-D0F3-47CA-BBE7-7FF7C868C791}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27DB2F6D-D0F3-47CA-BBE7-7FF7C868C791}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27DB2F6D-D0F3-47CA-BBE7-7FF7C868C791}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{310992A5-1F59-472C-A6BB-8CFDA2FE1EA0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{310992A5-1F59-472C-A6BB-8CFDA2FE1EA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{310992A5-1F59-472C-A6BB-8CFDA2FE1EA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{310992A5-1F59-472C-A6BB-8CFDA2FE1EA0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{310992A5-1F59-472C-A6BB-8CFDA2FE1EA0} = {96F74036-17C4-470A-B820-1B0653472F61}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {86EB9F5A-8C18-462B-A81C-3DAEEEEBA225}
+	EndGlobalSection
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = GongSolutions.Wpf.DragDrop (NET4).vsmdi
+	EndGlobalSection
+EndGlobal
